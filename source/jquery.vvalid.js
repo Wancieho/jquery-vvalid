@@ -12,6 +12,7 @@
 //#TODO: each field validated can have custom message via data-message attribute
 //#TODO: slideUp (animate) errors when less than previously generated, also animate more errors (slideDown)
 //#TODO: dont animate if no error
+//#TODO: check element type AKA select, input[text], textarea and read value
 ;
 (function ($, window, document, undefined) {
 	'use strict';
@@ -82,8 +83,12 @@
 	$.extend(vValid.prototype, {
 		events: function () {
 			var scope = this;
+			//retrieve first element with data-vvalid attribute and get its 
+			//closest form otherwise when there are multiple forms the other 
+			//forms are prevented from submitting
+			var form = $('*[data-vvalid]').eq(0).closest('form');
 
-			$.each($('form *[data-vvalid]'), function (i, element) {
+			$.each(form.find('*[data-vvalid]'), function (i, element) {
 				$(element).on('blur', function () {
 					/*
 					 * #TODO: see if theres a better way to handle this?
@@ -119,11 +124,11 @@
 				}
 			});
 
-			$('form').on('submit', function (e) {
+			form.on('submit', function (e) {
 				var valid = true;
 
 				//validate each form element with data atrr
-				$.each($('form *[data-vvalid]'), function (i, element) {
+				$.each(form.find('*[data-vvalid]'), function (i, element) {
 					//if any element validation fails
 					if (!scope.validate(element)) {
 						valid = false;
@@ -131,15 +136,15 @@
 				});
 
 				//custom event for plugin integration
-				$('form').trigger('submitting');
+				form.trigger('submitting');
 
 				//custom event for plugin integration
 				if (valid) {
 					this.submit();
-					$('form').trigger('submitted');
+					form.trigger('submitted');
 				} else {
 					e.preventDefault();
-					$('form').trigger('invalid');
+					form.trigger('invalid');
 				}
 			});
 		},

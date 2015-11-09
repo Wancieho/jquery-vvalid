@@ -44,77 +44,88 @@
             .text-error{
                 color: red;
             }
+
+			form > div{
+				width: 50%;
+				float: left;
+			}
         </style>
     </head>
     <body>
 		<form action="" method="post">
+			<input type="submit" value="Clear form"/>
+		</form>
+		<br/>
+		<form action="" method="post">
 			<div>
-				<label>Username</label>
-				<input type="text" name="username" data-vvalid="required" />
+				<div>
+					<label>Username</label>
+					<input type="text" name="username" data-vvalid="required" />
+				</div>
+				<div>
+					<label>ID Type</label>
+					<input type="text" data-vvalid="idType" />
+				</div>
+				<div>
+					<label>ID</label>
+					<input type="text" data-vvalid="idNumber" />
+				</div>
+				<div>
+					<label>Reference Number</label>
+					<input type="text" data-vvalid="alphaNumeric|min:10|max:15" />
+				</div>
+				<div>
+					<label>Password</label>
+					<input type="text" name="password" data-vvalid="alphaNumericSpecial|min:6" data-vvalid-name="Password" />
+				</div>
+				<div>
+					<label>Confirm password</label>
+					<input type="text" name="confirmPassword" data-vvalid="alphaNumericSpecial|min:6|match:password" data-vvalid-name="Confirm password" />
+				</div>
+				<div>
+					<label>Date released</label>
+					<input type="text" data-vvalid="datetime" />
+				</div>
 			</div>
 			<div>
-				<label>ID Type</label>
-				<input type="text" data-vvalid="idType" />
+				<div>
+					<label>Mobile</label>
+					<input type="text" data-vvalid="phoneNumber" />
+				</div>
+				<div>
+					<label>Email</label>
+					<input type="email" data-vvalid="email" />
+				</div>
+				<div>
+					<label>Description</label>
+					<textarea data-vvalid="required"></textarea>
+				</div>
+				<div>
+					<label>Account</label>
+					<input type="text" data-vvalid="exact:15" />
+				</div>
+				<div>
+					<label>Amount</label>
+					<input type="text" data-vvalid="decimal" data-vvalid-error-text="true" />
+				</div>
+				<div>
+					<label>Date created</label>
+					<input type="text" data-vvalid="date" />
+				</div>
+				<div>
+					<label>Branch Code</label>
+					<input type="text" data-vvalid="numeric" />
+				</div>
+				<div>
+					<label>Administrator</label>
+					<p data-vvalid="required|min:3">No</p>
+				</div>
+				<div>
+					<label>Ignore me</label>
+					<input type="email" disabled="disabled" data-vvalid="email" />
+				</div>
 			</div>
-			<div>
-				<label>ID</label>
-				<input type="text" data-vvalid="idNumber" />
-			</div>
-			<div>
-				<label>Reference Number</label>
-				<input type="text" data-vvalid="alphaNumeric|min:10|max:15" />
-			</div>
-			<div>
-				<label>Password</label>
-				<input type="text" name="password" data-vvalid="alphaNumericSpecial|min:6" data-vvalid-name="Password" />
-			</div>
-			<div>
-				<label>Confirm password</label>
-				<input type="text" name="confirmPassword" data-vvalid="alphaNumericSpecial|min:6|match:password" data-vvalid-name="Confirm password" />
-			</div>
-			<div>
-				<label>Date released</label>
-				<input type="text" data-vvalid="datetime" />
-			</div>
-			<div>
-				<label>Mobile</label>
-				<input type="text" data-vvalid="phoneNumber" />
-			</div>
-			<div>
-				<label>Email</label>
-				<input type="email" data-vvalid="email" />
-			</div>
-			<div>
-				<label>Description</label>
-				<textarea data-vvalid="required"></textarea>
-			</div>
-			<div>
-				<label>Account</label>
-				<input type="text" data-vvalid="exact:15" />
-			</div>
-			<div>
-				<label>Amount</label>
-				<input type="text" data-vvalid="decimal" data-vvalid-error-text="true" />
-			</div>
-			<div>
-				<label>Date created</label>
-				<input type="text" data-vvalid="date" />
-			</div>
-			<div>
-				<label>Branch Code</label>
-				<input type="text" data-vvalid="numeric" />
-			</div>
-			<div>
-				<label>Administrator</label>
-				<p data-vvalid="required|min:3">No</p>
-			</div>
-			<div>
-				<label>Ignore me</label>
-				<input type="email" disabled="disabled" data-vvalid="email" />
-			</div>
-			<div>
-				<input type="submit" />
-			</div>
+			<input type="submit" value="Test"/>
 		</form>
     </body>
 </html>
