@@ -1,18 +1,9 @@
-/*
- * Project: vValid
- * Description: A jQuery form validation plugin with customisation features
- * Author: Vaughan Webber - www.vaughanderful.co.za
- * License: MIT
- * Version: 0.0.1
- * Dependancies: jquery-1.*
- * Date: 05/10/2015
- */
-
 //#TODO: allow validation override + "addition"
 //#TODO: each field validated can have custom message via data-message attribute
 //#TODO: slideUp (animate) errors when less than previously generated, also animate more errors (slideDown)
 //#TODO: dont animate if no error
 //#TODO: check element type AKA select, input[text], textarea and read value
+//#TODO: cater for multiple forms bug
 ;
 (function ($, window, document, undefined) {
 	'use strict';

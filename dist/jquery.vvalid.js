@@ -1,18 +1,12 @@
 /*
  * Project: vValid
  * Description: A jQuery form validation plugin with customisation features
- * Author: Vaughan Webber - www.vaughanderful.co.za
+ * Author: https://github.com/Wancieho
  * License: MIT
- * Version: 0.0.2
+ * Version: 0.0.3
  * Dependancies: jquery-1.*
  * Date: 05/10/2015
  */
-
-//#TODO: allow validation override + "addition"
-//#TODO: each field validated can have custom message via data-message attribute
-//#TODO: slideUp (animate) errors when less than previously generated, also animate more errors (slideDown)
-//#TODO: dont animate if no error
-//#TODO: check element type AKA select, input[text], textarea and read value
 ;
 (function ($, window, document, undefined) {
 	'use strict';
@@ -47,9 +41,7 @@
 		this.settings = defaults;
 
 		if (options !== undefined) {
-			//update existing properties
 			for (var a in defaults) {
-				//root property else an object property
 				if (typeof defaults[a] !== 'object') {
 					if (options[a] !== undefined) {
 						this.settings[a] = options[a];
@@ -65,7 +57,6 @@
 				}
 			}
 
-			//insert additional properties (objects)
 			for (var a in options) {
 				if (typeof options[a] === 'object') {
 					for (var b in options[a]) {
@@ -83,22 +74,10 @@
 	$.extend(vValid.prototype, {
 		events: function () {
 			var scope = this;
-			//retrieve first element with data-vvalid attribute and get its 
-			//closest form otherwise when there are multiple forms the other 
-			//forms are prevented from submitting
 			var form = $('*[data-vvalid]').eq(0).closest('form');
 
 			$.each(form.find('*[data-vvalid]'), function (i, element) {
 				$(element).on('blur', function () {
-					/*
-					 * #TODO: see if theres a better way to handle this?
-					 * #TODO: maybe its possible to prevent on blur event if the submit is going to fire?
-					 * the on blur event is firing before the form submit so
-					 * the submit button release event gets missed if the
-					 * HTML changes (adding/removing errors) causes the
-					 * submit button to move outside of the mouse release
-					 * area
-					 */
 					setTimeout(function () {
 						scope.validate(element);
 					}, 200);
@@ -110,12 +89,10 @@
 					}, 200);
 				});
 
-				//if page loads and element is not empty then validate
 				if ($(element).val() !== '') {
 					scope.validate(element);
 				}
 
-				//static text change event
 				if (typeof MutationObserver === 'function') {
 					var observer = new MutationObserver(function (mutations) {
 						scope.validate(element);
@@ -127,18 +104,14 @@
 			form.on('submit', function (e) {
 				var valid = true;
 
-				//validate each form element with data atrr
 				$.each(form.find('*[data-vvalid]'), function (i, element) {
-					//if any element validation fails
 					if (!scope.validate(element)) {
 						valid = false;
 					}
 				});
 
-				//custom event for plugin integration
 				form.trigger('submitting');
 
-				//custom event for plugin integration
 				if (valid) {
 					this.submit();
 					form.trigger('submitted');
@@ -161,16 +134,13 @@
 
 					methods.push(method);
 
-					//if method parameters exist extract them
 					if (methodAndParams.length > 1) {
 						param = methodAndParams[1];
 					}
 
-					//method exists
 					if (this[method] !== undefined || this.settings.customMethods[method] !== undefined) {
 						var value = $(element)[0].value !== undefined ? $(element).clone().children().remove().end().val() : $(element).clone().children().remove().end().text();
 
-						//call specified method and store response
 						if (this[method] !== undefined) {
 							var error = this[method](value, param);
 						} else if (this.settings.customMethods[method] !== undefined) {
@@ -287,15 +257,6 @@
 			}
 		},
 		phoneNumber: function (value) {
-			/*
-			 * error conditions:
-			 * 
-			 * more than 1 + is found
-			 * the + is found anywhere else in the string but the start
-			 * total digits is less than 10
-			 * total digits is more than 14
-			 * all characters are allowed
-			 */
 			if ((value.match(/\+/g) || []).length > 1 || value.indexOf('+') > 0 || value.length < 10 || value.length > 14 || !allowedStringCharacters(value, '+0123456789')) {
 				return this.settings.messages.phoneNumber;
 			}
@@ -310,9 +271,6 @@
 
 	$.extend($.vValid, {
 		destroy: function () {
-			//#TODO: figure out why cant access below properties
-//			console.log(validate);
-//			console.log(this.validate);
 			delete this.validate;
 		}
 	});
