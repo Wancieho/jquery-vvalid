@@ -8,6 +8,8 @@
 (function ($, window, document, undefined) {
 	'use strict';
 
+	var valid = true;
+	var pluginName = 'vValid';
 	var defaults = {
 		messages: {
 			required: 'This field cannot be empty',
@@ -34,111 +36,21 @@
 		displayText: true
 	};
 
-	function vValid(options) {
+	function vValid(elements) {
+		var scope = this;
 		this.settings = defaults;
+		this.elements = elements;
 
-		if (options !== undefined) {
-			//update existing properties
-			for (var a in defaults) {
-				//root property else an object property
-				if (typeof defaults[a] !== 'object') {
-					if (options[a] !== undefined) {
-						this.settings[a] = options[a];
-					}
-				} else {
-					if (defaults[a] !== undefined) {
-						for (var b in defaults[a]) {
-							if (options[a] !== undefined && options[a][b] !== undefined) {
-								this.settings[a][b] = options[a][b];
-							}
-						}
-					}
-				}
+		this.valid = true;
+		$.each(this.elements, function (i, element) {
+			//if any element validation fails
+			if (!scope.validate(element)) {
+				scope.valid = false;
 			}
-
-			//insert additional properties (objects)
-			for (var a in options) {
-				if (typeof options[a] === 'object') {
-					for (var b in options[a]) {
-						if (this.settings[a][b] === undefined) {
-							this.settings[a][b] = options[a][b];
-						}
-					}
-				}
-			}
-		}
-
-		this.events();
+		});
 	}
 
 	$.extend(vValid.prototype, {
-		events: function () {
-			var scope = this;
-			//retrieve first element with data-vvalid attribute and get its 
-			//closest form otherwise when there are multiple forms the other 
-			//forms are prevented from submitting
-			var form = $('*[data-vvalid]').eq(0).closest('form');
-
-			$.each(form.find('*[data-vvalid]'), function (i, element) {
-				$(element).on('blur', function () {
-					/*
-					 * #TODO: see if theres a better way to handle this?
-					 * #TODO: maybe its possible to prevent on blur event if the submit is going to fire?
-					 * the on blur event is firing before the form submit so
-					 * the submit button release event gets missed if the
-					 * HTML changes (adding/removing errors) causes the
-					 * submit button to move outside of the mouse release
-					 * area
-					 */
-					setTimeout(function () {
-						scope.validate(element);
-					}, 200);
-				});
-
-				$(element).on('keyup, change', function () {
-					setTimeout(function () {
-						scope.validate(element);
-					}, 200);
-				});
-
-				//if page loads and element is not empty then validate
-				if ($(element).val() !== '') {
-					scope.validate(element);
-				}
-
-				//static text change event
-				if (typeof MutationObserver === 'function') {
-					var observer = new MutationObserver(function (mutations) {
-						scope.validate(element);
-					}.bind(this));
-					observer.observe($(element).get(0), {characterData: true, childList: true});
-				}
-			});
-
-			form.on('submit', function (e) {
-				var valid = true;
-
-				//validate each form element with data atrr
-				$.each(form.find('*[data-vvalid]'), function (i, element) {
-					//if any element validation fails
-					if (!scope.validate(element)) {
-						valid = false;
-					}
-				});
-
-				//custom event for plugin integration
-				form.trigger('submitting');
-
-				//custom event for plugin integration
-				if (valid) {
-					this.submit();
-					form.trigger('submitted');
-				} else {
-					e.preventDefault();
-					form.trigger('invalid');
-				}
-			});
-		},
 		validate: function (element) {
 			if ($(element).attr('data-vvalid') && $(element).attr('disabled') !== 'disabled') {
 				var errors = Array();
@@ -159,6 +71,7 @@
 
 					//method exists
 					if (this[method] !== undefined || this.settings.customMethods[method] !== undefined) {
+
 						var value = $(element)[0].value !== undefined ? $(element).clone().children().remove().end().val() : $(element).clone().children().remove().end().text();
 
 						//call specified method and store response
@@ -293,21 +206,6 @@
 		}
 	});
 
-	$.vValid = function (options) {
-		if (this.validate === undefined) {
-			this.validate = new vValid(options);
-		}
-	};
-
-	$.extend($.vValid, {
-		destroy: function () {
-			//#TODO: figure out why cant access below properties
-//			console.log(validate);
-//			console.log(this.validate);
-			delete this.validate;
-		}
-	});
-
 	function allowedStringCharacters(string, allowedChars) {
 		var valid = true;
 
@@ -320,4 +218,9 @@
 
 		return valid;
 	}
+
+	$.vValid = function (elements) {
+		return new vValid(elements).valid;
+	};
+
 })(jQuery, window, document);

@@ -11,6 +11,8 @@
 (function ($, window, document, undefined) {
 	'use strict';
 
+	var valid = true;
+	var pluginName = 'vValid';
 	var defaults = {
 		messages: {
 			required: 'This field cannot be empty',
@@ -37,90 +39,20 @@
 		displayText: true
 	};
 
-	function vValid(options) {
+	function vValid(elements) {
+		var scope = this;
 		this.settings = defaults;
+		this.elements = elements;
 
-		if (options !== undefined) {
-			for (var a in defaults) {
-				if (typeof defaults[a] !== 'object') {
-					if (options[a] !== undefined) {
-						this.settings[a] = options[a];
-					}
-				} else {
-					if (defaults[a] !== undefined) {
-						for (var b in defaults[a]) {
-							if (options[a] !== undefined && options[a][b] !== undefined) {
-								this.settings[a][b] = options[a][b];
-							}
-						}
-					}
-				}
+		this.valid = true;
+		$.each(this.elements, function (i, element) {
+			if (!scope.validate(element)) {
+				scope.valid = false;
 			}
-
-			for (var a in options) {
-				if (typeof options[a] === 'object') {
-					for (var b in options[a]) {
-						if (this.settings[a][b] === undefined) {
-							this.settings[a][b] = options[a][b];
-						}
-					}
-				}
-			}
-		}
-
-		this.events();
+		});
 	}
 
 	$.extend(vValid.prototype, {
-		events: function () {
-			var scope = this;
-			var form = $('*[data-vvalid]').eq(0).closest('form');
-
-			$.each(form.find('*[data-vvalid]'), function (i, element) {
-				$(element).on('blur', function () {
-					setTimeout(function () {
-						scope.validate(element);
-					}, 200);
-				});
-
-				$(element).on('keyup, change', function () {
-					setTimeout(function () {
-						scope.validate(element);
-					}, 200);
-				});
-
-				if ($(element).val() !== '') {
-					scope.validate(element);
-				}
-
-				if (typeof MutationObserver === 'function') {
-					var observer = new MutationObserver(function (mutations) {
-						scope.validate(element);
-					}.bind(this));
-					observer.observe($(element).get(0), {characterData: true, childList: true});
-				}
-			});
-
-			form.on('submit', function (e) {
-				var valid = true;
-
-				$.each(form.find('*[data-vvalid]'), function (i, element) {
-					if (!scope.validate(element)) {
-						valid = false;
-					}
-				});
-
-				form.trigger('submitting');
-
-				if (valid) {
-					this.submit();
-					form.trigger('submitted');
-				} else {
-					e.preventDefault();
-					form.trigger('invalid');
-				}
-			});
-		},
 		validate: function (element) {
 			if ($(element).attr('data-vvalid') && $(element).attr('disabled') !== 'disabled') {
 				var errors = Array();
@@ -139,6 +71,7 @@
 					}
 
 					if (this[method] !== undefined || this.settings.customMethods[method] !== undefined) {
+
 						var value = $(element)[0].value !== undefined ? $(element).clone().children().remove().end().val() : $(element).clone().children().remove().end().text();
 
 						if (this[method] !== undefined) {
@@ -263,18 +196,6 @@
 		}
 	});
 
-	$.vValid = function (options) {
-		if (this.validate === undefined) {
-			this.validate = new vValid(options);
-		}
-	};
-
-	$.extend($.vValid, {
-		destroy: function () {
-			delete this.validate;
-		}
-	});
-
 	function allowedStringCharacters(string, allowedChars) {
 		var valid = true;
 
@@ -287,4 +208,9 @@
 
 		return valid;
 	}
+
+	$.vValid = function (elements) {
+		return new vValid(elements).valid;
+	};
+
 })(jQuery, window, document);
