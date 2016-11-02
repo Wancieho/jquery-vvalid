@@ -12,5 +12,8 @@
     "gulpfile.js",
     "package.json"
   ],
-  "devDependencies": {}
+  "devDependencies": {
+    "bootstrap": "2.*",
+    "jquery": "1.*"
+  }
 }

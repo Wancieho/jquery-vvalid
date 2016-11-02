@@ -37,7 +37,7 @@
 		displayText: true
 	};
 
-	function vValid(options) {
+	function vValid(options, fields) {
 		this.settings = defaults;
 
 		if (options !== undefined) {
@@ -263,18 +263,6 @@
 		}
 	});
 
-	$.vValid = function (options) {
-		if (this.validate === undefined) {
-			this.validate = new vValid(options);
-		}
-	};
-
-	$.extend($.vValid, {
-		destroy: function () {
-			delete this.validate;
-		}
-	});
-
 	function allowedStringCharacters(string, allowedChars) {
 		var valid = true;
 
@@ -287,4 +275,16 @@
 
 		return valid;
 	}
+
+	$.vValid = function (options, fields) {
+		if (this.validate === undefined) {
+			this.validate = new vValid(options, fields);
+		}
+	};
+
+	$.extend($.vValid, {
+		destroy: function () {
+			delete this.validate;
+		}
+	});
 })(jQuery, window, document);

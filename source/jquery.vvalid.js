@@ -34,7 +34,7 @@
 		displayText: true
 	};
 
-	function vValid(options) {
+	function vValid(options, fields) {
 		this.settings = defaults;
 
 		if (options !== undefined) {
@@ -293,21 +293,6 @@
 		}
 	});
 
-	$.vValid = function (options) {
-		if (this.validate === undefined) {
-			this.validate = new vValid(options);
-		}
-	};
-
-	$.extend($.vValid, {
-		destroy: function () {
-			//#TODO: figure out why cant access below properties
-//			console.log(validate);
-//			console.log(this.validate);
-			delete this.validate;
-		}
-	});
-
 	function allowedStringCharacters(string, allowedChars) {
 		var valid = true;
 
@@ -320,4 +305,19 @@
 
 		return valid;
 	}
+
+	$.vValid = function (options, fields) {
+		if (this.validate === undefined) {
+			this.validate = new vValid(options, fields);
+		}
+	};
+
+	$.extend($.vValid, {
+		destroy: function () {
+			//#TODO: figure out why cant access below properties
+//			console.log(validate);
+//			console.log(this.validate);
+			delete this.validate;
+		}
+	});
 })(jQuery, window, document);
