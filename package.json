@@ -5,9 +5,8 @@
     "gulp-header": "^1.7.1",
     "gulp-rename": "^1.2.2",
     "gulp-strip-comments": "^2.2.1",
-    "gulp-uglify": "^1.4.1"
-  },
-  "dependencies": {
+    "gulp-uglify": "^1.4.1",
     "jquery": "^1.*"
-  }
+  },
+  "dependencies": {}
 }
