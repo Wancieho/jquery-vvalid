@@ -3,7 +3,7 @@
  * Description: A jQuery form validation plugin with customisation features
  * Author: https://github.com/Wancieho
  * License: MIT
- * Version: 0.0.3
+ * Version: 0.0.4
  * Dependancies: jquery-1.*
  * Date: 05/10/2015
  */
@@ -39,8 +39,9 @@
 
 	function vValid(options, fields) {
 		this.settings = defaults;
+		this.valid = true;
 
-		if (options !== undefined) {
+		if (options !== undefined && options !== null) {
 			for (var a in defaults) {
 				if (typeof defaults[a] !== 'object') {
 					if (options[a] !== undefined) {
@@ -68,11 +69,15 @@
 			}
 		}
 
-		this.events();
+		if (fields === undefined || fields === null) {
+			this.isAForm();
+		} else {
+			this.isNotAForm(fields);
+		}
 	}
 
 	$.extend(vValid.prototype, {
-		events: function () {
+		isAForm: function () {
 			var scope = this;
 			var form = $('*[data-vvalid]').eq(0).closest('form');
 
@@ -94,7 +99,7 @@
 				}
 
 				if (typeof MutationObserver === 'function') {
-					var observer = new MutationObserver(function (mutations) {
+					var observer = new MutationObserver(function () {
 						scope.validate(element);
 					}.bind(this));
 					observer.observe($(element).get(0), {characterData: true, childList: true});
@@ -118,6 +123,22 @@
 				} else {
 					e.preventDefault();
 					form.trigger('invalid');
+				}
+			});
+		},
+		isNotAForm: function (fields) {
+			var scope = this;
+			this.valid = true;
+
+			$.each(fields, function () {
+				if (this instanceof jQuery) {
+					if (!scope.validate(this)) {
+						scope.valid = false;
+					}
+				} else {
+					if (!scope.validate($(this))) {
+						scope.valid = false;
+					}
 				}
 			});
 		},
@@ -277,8 +298,12 @@
 	}
 
 	$.vValid = function (options, fields) {
-		if (this.validate === undefined) {
-			this.validate = new vValid(options, fields);
+		if (fields !== undefined && fields !== null) {
+			return new vValid(options, fields).valid;
+		} else {
+			if (this.validate === undefined) {
+				this.validate = new vValid(options, fields);
+			}
 		}
 	};
 

@@ -36,8 +36,9 @@
 
 	function vValid(options, fields) {
 		this.settings = defaults;
+		this.valid = true;
 
-		if (options !== undefined) {
+		if (options !== undefined && options !== null) {
 			//update existing properties
 			for (var a in defaults) {
 				//root property else an object property
@@ -68,11 +69,15 @@
 			}
 		}
 
-		this.events();
+		if (fields === undefined || fields === null) {
+			this.isAForm();
+		} else {
+			this.isNotAForm(fields);
+		}
 	}
 
 	$.extend(vValid.prototype, {
-		events: function () {
+		isAForm: function () {
 			var scope = this;
 			//retrieve first element with data-vvalid attribute and get its 
 			//closest form otherwise when there are multiple forms the other 
@@ -108,7 +113,7 @@
 
 				//static text change event
 				if (typeof MutationObserver === 'function') {
-					var observer = new MutationObserver(function (mutations) {
+					var observer = new MutationObserver(function () {
 						scope.validate(element);
 					}.bind(this));
 					observer.observe($(element).get(0), {characterData: true, childList: true});
@@ -139,6 +144,22 @@
 				}
 			});
 		},
+		isNotAForm: function (fields) {
+			var scope = this;
+			this.valid = true;
+
+			$.each(fields, function () {
+				if (this instanceof jQuery) {
+					if (!scope.validate(this)) {
+						scope.valid = false;
+					}
+				} else {
+					if (!scope.validate($(this))) {
+						scope.valid = false;
+					}
+				}
+			});
+		},
 		validate: function (element) {
 			if ($(element).attr('data-vvalid') && $(element).attr('disabled') !== 'disabled') {
 				var errors = Array();
@@ -157,6 +178,7 @@
 						param = methodAndParams[1];
 					}
 
+					//#TODO: cater for textarea
 					//method exists
 					if (this[method] !== undefined || this.settings.customMethods[method] !== undefined) {
 						var value = $(element)[0].value !== undefined ? $(element).clone().children().remove().end().val() : $(element).clone().children().remove().end().text();
@@ -307,8 +329,12 @@
 	}
 
 	$.vValid = function (options, fields) {
-		if (this.validate === undefined) {
-			this.validate = new vValid(options, fields);
+		if (fields !== undefined && fields !== null) {
+			return new vValid(options, fields).valid;
+		} else {
+			if (this.validate === undefined) {
+				this.validate = new vValid(options, fields);
+			}
 		}
 	};
 

@@ -3,56 +3,7 @@
     <head>
         <title>vValid demo</title>
 		<link href="../bower_components/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet" type="text/css" media="screen"/>
-        <script src="../bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
-        <script src="../source/jquery.vvalid.js" type="text/javascript"></script>
-        <script type="text/javascript">
-			(function ($, document) {
-				$(document).ready(function () {
-					$.vValid({
-						messages: {
-							datetime: 'A valid date format is expected (yyyy-mm-dd hh:mmAM or yyyy-mm-dd hh:mmPM)'
-						},
-						regex: {
-							datetime: /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])\s[0-2]?[0-9]:[0-5][0-9]\s[aApP][mM]$/
-						},
-						customMethods: {
-							idType: function (value) {
-								if (value !== 'RSAID' && value !== 'PassportNumber') {
-									return 'A valid ID type must be specified';
-								}
-							}
-						}
-					});
-
-					$('form').on('submitted', function () {
-						$('[name="with"]').prop('disabled', true);
-					});
-
-					$('[name="username"]').on('click', function () {
-						$('p').text('Yes');
-					});
-
-					$('[name="without"]').on('click', function () {
-						$.vValid({
-							messages: {
-								datetime: 'A valid date format is expected (yyyy-mm-dd hh:mmAM or yyyy-mm-dd hh:mmPM)'
-							},
-							regex: {
-								datetime: /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])\s[0-2]?[0-9]:[0-5][0-9]\s[aApP][mM]$/
-							},
-							customMethods: {
-								idType: function (value) {
-									if (value !== 'RSAID' && value !== 'PassportNumber') {
-										return 'A valid ID type must be specified';
-									}
-								}
-							}
-						});
-					});
-				});
-			})(jQuery, document);
-        </script>
-        <style type="text/css">
+		<style type="text/css">
             body{
                 font-family: arial, helvetica, sans-serif;
                 font-size: 14px;
@@ -98,6 +49,43 @@
 				background: white;
 			}
         </style>
+        <script src="../bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+        <script src="../source/jquery.vvalid.js" type="text/javascript"></script>
+        <script type="text/javascript">
+			(function ($, document) {
+				$(document).ready(function () {
+					$.vValid({
+						messages: {
+							datetime: 'A valid date format is expected (yyyy-mm-dd hh:mmAM or yyyy-mm-dd hh:mmPM)'
+						},
+						regex: {
+							datetime: /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])\s[0-2]?[0-9]:[0-5][0-9]\s[aApP][mM]$/
+						},
+						customMethods: {
+							idType: function (value) {
+								if (value !== 'RSAID' && value !== 'PassportNumber') {
+									return 'A valid ID type must be specified';
+								}
+							}
+						}
+					});
+
+					$('form').on('submitted', function () {
+						$('[name="with"]').prop('disabled', true);
+					});
+
+					$('[name="username"]').on('click', function () {
+						$('p').text('Yes');
+					});
+
+					$('[name="without"]').on('click', function () {
+						if ($.vValid(null, $('.col2 input'))) {
+							alert('Form is valid');
+						}
+					});
+				});
+			})(jQuery, document);
+        </script>
     </head>
     <body>
 		<h1>vValid demo</h1>
@@ -139,10 +127,10 @@
 				<input type="submit" name="with" value="With form" class="btn btn-primary"/>
 			</form>
 		</div>
-		<div class="col">
+		<div class="col col2">
 			<div>
 				<label>Mobile</label>
-				<input type="text" data-vvalid="phoneNumber" />
+				<input type="text" name="mobile" data-vvalid="phoneNumber" />
 			</div>
 			<div>
 				<label>Email</label>
