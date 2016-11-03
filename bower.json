@@ -3,7 +3,6 @@
   "version": "0.0.4",
   "main" : "source/jquery.vvalid.js",
   "ignore": [
-    "demo",
     "node_modules",
     "source",
     ".gitignore",
