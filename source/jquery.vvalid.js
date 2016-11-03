@@ -158,6 +158,12 @@
 						scope.valid = false;
 					}
 				}
+
+				(function events(element) {
+					$(element).on('blur', function () {
+						scope.validate(element);
+					});
+				})(this);
 			});
 		},
 		validate: function (element) {

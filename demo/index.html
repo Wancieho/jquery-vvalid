@@ -28,6 +28,11 @@
 				line-height: normal;
             }
 
+			input[type="text"].error,
+			input[type="email"].error{
+				border: 1px solid red;
+			}
+
 			h1{
 				padding: 0 2%;
 			}
@@ -50,7 +55,7 @@
 			}
         </style>
         <script src="../bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
-        <script src="../source/jquery.vvalid.js" type="text/javascript"></script>
+        <script src="../dist/jquery.vvalid.min.js" type="text/javascript"></script>
         <script type="text/javascript">
 			(function ($, document) {
 				$(document).ready(function () {
