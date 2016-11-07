@@ -235,7 +235,7 @@
 			}
 
 			if (previousErrorCount < errors.length) {
-				$(element).siblings('.errors').slideDown(100);
+				$(element).siblings('.errors').show();
 			}
 		},
 		required: function (value) {

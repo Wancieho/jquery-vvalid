@@ -3,7 +3,7 @@
  * Description: A jQuery form validation plugin with customisation features
  * Author: https://github.com/Wancieho
  * License: MIT
- * Version: 0.0.4
+ * Version: 0.0.5
  * Dependancies: jquery-1.*
  * Date: 05/10/2015
  */
@@ -213,7 +213,7 @@
 			}
 
 			if (previousErrorCount < errors.length) {
-				$(element).siblings('.errors').slideDown(100);
+				$(element).siblings('.errors').show();
 			}
 		},
 		required: function (value) {
