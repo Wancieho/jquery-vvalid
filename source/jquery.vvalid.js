@@ -222,10 +222,12 @@
 				}
 
 				if (this.settings.displayText || $(element).attr('data-vvalid-error-text') === 'true') {
-					$(element).parent().append('<div class="errors">');
+					if ($(element).attr('data-vvalid-error-text') !== 'false') {
+						$(element).parent().append('<div class="errors">');
 
-					for (var i in errors) {
-						$(element).siblings('.errors').append('<div class="text-error">' + errors[i].text + '</div>');
+						for (var i in errors) {
+							$(element).siblings('.errors').append('<div class="text-error">' + errors[i].text + '</div>');
+						}
 					}
 				}
 			}
