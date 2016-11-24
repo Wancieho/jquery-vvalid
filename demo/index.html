@@ -29,7 +29,9 @@
             }
 
 			input[type="text"].error,
-			input[type="email"].error{
+			input[type="email"].error,
+            textarea.error,
+            select.error{
 				border: 1px solid red;
 			}
 
@@ -42,7 +44,7 @@
 				background: lightgray;
 			}
 
-			textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input{
+			select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input{
 				margin-bottom: 0;
 			}
 
@@ -84,7 +86,7 @@
 					});
 
 					$('[name="without"]').on('click', function () {
-						if ($.vValid(null, $('.col2 input'))) {
+						if ($.vValid(null, $('.col2 [data-vvalid]'))) {
 							alert('Form is valid');
 						}
 					});
@@ -124,6 +126,18 @@
 					<label>Date released</label>
 					<input type="text" data-vvalid="datetime" />
 				</div>
+                <div>
+                    <label>Description</label>
+                    <textarea data-vvalid="required"></textarea>
+                </div>
+                <div>
+                    <label>Option</label>
+                    <select data-vvalid="required">
+                        <option value="">Select option</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
 				<div>
 					<label>Administrator</label>
 					<p data-vvalid="required|min:3">No</p>
@@ -160,6 +174,14 @@
 			<div>
 				<label>Branch Code</label>
 				<input type="text" data-vvalid="numeric" />
+			</div>
+			<div>
+				<label>Option</label>
+				<select data-vvalid="required">
+                    <option value="">Select option</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
 			</div>
 			<div>
 				<label>Ignore me</label>
