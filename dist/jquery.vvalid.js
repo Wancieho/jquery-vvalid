@@ -3,7 +3,7 @@
  * Description: A jQuery form validation plugin with customisation features
  * Author: https://github.com/Wancieho
  * License: MIT
- * Version: 0.0.5
+ * Version: 0.0.6
  * Dependancies: jquery-1.*
  * Date: 05/10/2015
  */
@@ -217,10 +217,12 @@
 				}
 
 				if (this.settings.displayText || $(element).attr('data-vvalid-error-text') === 'true') {
-					$(element).parent().append('<div class="errors">');
+					if ($(element).attr('data-vvalid-error-text') !== 'false') {
+						$(element).parent().append('<div class="errors">');
 
-					for (var i in errors) {
-						$(element).siblings('.errors').append('<div class="text-error">' + errors[i].text + '</div>');
+						for (var i in errors) {
+							$(element).siblings('.errors').append('<div class="text-error">' + errors[i].text + '</div>');
+						}
 					}
 				}
 			}

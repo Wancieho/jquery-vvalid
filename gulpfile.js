@@ -8,7 +8,7 @@ var license = '/*\n' +
 		' * Description: A jQuery form validation plugin with customisation features\n' +
 		' * Author: https://github.com/Wancieho\n' +
 		' * License: MIT\n' +
-		' * Version: 0.0.5\n' +
+		' * Version: 0.0.6\n' +
 		' * Dependancies: jquery-1.*\n' +
 		' * Date: 05/10/2015\n' +
 		' */\n';
