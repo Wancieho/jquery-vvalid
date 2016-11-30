@@ -166,7 +166,24 @@
 					}
 
 					if (this[method] !== undefined || this.settings.customMethods[method] !== undefined) {
-						var value = $(element)[0].value !== undefined ? $(element).clone().children().remove().end().val() : $(element).clone().children().remove().end().text();
+						var value = '';
+						switch ($(element)[0].nodeName.toLowerCase()) {
+							case 'input':
+								value = $(element).clone().children().remove().end().val();
+								break;
+
+							case 'textarea':
+								value = $(element).clone().children().remove().end().val();
+								break;
+
+							case 'select':
+								value = ($(element).find('option:selected').val() !== undefined) ? $(element).find('option:selected').clone().children().remove().end().val() : '';
+								break;
+
+							default:
+								throw 'Element type not supported.';
+								break;
+						}
 
 						if (this[method] !== undefined) {
 							var error = this[method](value, param);

@@ -2,7 +2,6 @@
 //#TODO: each field validated can have custom message via data-message attribute
 //#TODO: slideUp (animate) errors when less than previously generated, also animate more errors (slideDown)
 //#TODO: dont animate if no error
-//#TODO: check element type AKA select, input[text], textarea and read value
 //#TODO: cater for multiple forms bug
 ;
 (function ($, window, document, undefined) {
@@ -184,10 +183,26 @@
 						param = methodAndParams[1];
 					}
 
-					//#TODO: cater for textarea
 					//method exists
 					if (this[method] !== undefined || this.settings.customMethods[method] !== undefined) {
-						var value = $(element)[0].value !== undefined ? $(element).clone().children().remove().end().val() : $(element).clone().children().remove().end().text();
+						var value = '';
+						switch ($(element)[0].nodeName.toLowerCase()) {
+							case 'input':
+								value = $(element).clone().children().remove().end().val();
+								break;
+
+							case 'textarea':
+								value = $(element).clone().children().remove().end().val();
+								break;
+
+							case 'select':
+								value = ($(element).find('option:selected').val() !== undefined) ? $(element).find('option:selected').clone().children().remove().end().val() : '';
+								break;
+
+							default:
+								throw 'Element type not supported.';
+								break;
+						}
 
 						//call specified method and store response
 						if (this[method] !== undefined) {
